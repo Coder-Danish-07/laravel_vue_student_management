@@ -1,7 +1,8 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
+import { watch, ref } from 'vue';
 
 defineProps({
     classes: {
@@ -10,6 +11,31 @@ defineProps({
     },
 });
 
+let sections = ref({});
+
+const form = useForm({
+    name: '',
+    email: '',
+    class_id: '',
+    section_id: '',
+});
+
+watch(
+    () => form.class_id,
+
+    (newValue) => {
+        getSections(newValue);
+    }
+);
+
+const getSections = (classId) => {
+
+    axios.get('/api/sections?class_id=' + classId)
+        .then((response) => {
+            sections.value = response.data;
+        })
+
+};
 </script>
 
 
@@ -52,13 +78,12 @@ defineProps({
                                             >Name</label
                                         >
                                         <input
+                                            v-model="form.name"
                                             type="text"
                                             id="name"
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm @error text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300 @enderror"
                                         />
-                                        <p class="text-red-500">
-                                            This field is required
-                                        </p>
+                                       
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3">
@@ -68,6 +93,7 @@ defineProps({
                                             >Email Address</label
                                         >
                                         <input
+                                            v-model="form.email"
                                             type="email"
                                             id="email"
                                             autocomplete="email"
@@ -82,6 +108,7 @@ defineProps({
                                             >Class</label
                                         >
                                         <select
+                                            v-model="form.class_id"
                                             id="class_id"
                                             class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         >
@@ -99,13 +126,14 @@ defineProps({
                                             >Section</label
                                         >
                                         <select
+                                            v-model="form.section_id"
                                             id="section_id"
                                             class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         >
                                             <option value="">
                                                 Select a Section
                                             </option>
-                                            <option value="1">Section A</option>
+                                            <option v-for="section in sections.data" :key="section.id" :value="section.id">{{ section.name }}</option>
                                         </select>
                                     </div>
                                 </div>
