@@ -7,6 +7,7 @@ use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Models\Classes;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreStudentRequest;
 
 class StudentController extends Controller
 {
@@ -26,5 +27,12 @@ class StudentController extends Controller
         return inertia('Students/Create',[
             'classes' => $classes
         ]);
+    }
+
+    Public function store(StoreStudentRequest $request){
+
+        Student::create($request->validated());
+
+        return redirect()->route('students.index');
     }
 }
