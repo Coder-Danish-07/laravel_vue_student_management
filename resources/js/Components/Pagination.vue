@@ -7,17 +7,21 @@ import { router, usePage } from '@inertiajs/vue3';
             type: Object,
             required: true
         },
+        updatedPageNumber:{
+            type: Function,
+            required: true
+        }
     });
 
-    const updatePageNumber = (link) => {
+    // const updatePageNumber = (link) => {
         
-        let pageNumber = link.url.split('=')[1];
+    //     let pageNumber = link.url.split('=')[1];
 
-        router.visit('/students?page=' + pageNumber,{
-            preserveScroll: true
-        });
+    //     router.visit('/students?page=' + pageNumber,{
+    //         preserveScroll: true
+    //     });
         
-    }
+    // }
     // console.log(usePage().props.data);
 </script>
 
@@ -56,7 +60,7 @@ import { router, usePage } from '@inertiajs/vue3';
                                 aria-label="Pagination"
                             >
                                 <button
-                                    @click.prevent="updatePageNumber(link)"
+                                    @click.prevent="updatedPageNumber(link)"
                                     v-for="(link,index) in data.meta.links" :key="index"
                                     :disabled="link.active || !link.url"
                                     class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
