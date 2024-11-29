@@ -42,6 +42,16 @@ watch(
     }
 
 );
+
+watch(
+    () => search.value,
+    (value) => {
+        if(value){
+            pageNumber.value = 1;
+        }
+    }
+
+);
 // console.log(usePage().props.students);
 const deleteForm = useForm({});
 const studentDelete = (studentId) => {
